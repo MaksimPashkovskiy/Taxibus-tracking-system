@@ -1,6 +1,7 @@
 package com.example.taxibus_tracking_system.ui.map;
 
 import android.Manifest;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.taxibus_tracking_system.R;
@@ -20,27 +21,21 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-
-import java.util.concurrent.Executor;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private static final String TAG = MapFragment.class.getSimpleName();
-    private MapViewModel mapViewModel;
-    private GoogleMap mMap;
-    private CameraPosition mCameraPosition;
-    private UiSettings mUiSettings;
+    private MapViewModel mapViewModel = null;
+    private GoogleMap mMap = null;
+    private CameraPosition mCameraPosition = null;
+    private UiSettings uiSettings = null;
 
     // The entry point to the Fused Location Provider.
     private FusedLocationProviderClient mFusedLocationProviderClient;
 
     // The geographical location where the device is currently located. That is, the last-known
     // location retrieved by the Fused Location Provider.
-    private Location mLastKnownLocation;
+    private Location mLastKnownLocation = null;
 
     // Keys for storing activity state.
     private static final String KEY_CAMERA_POSITION = "camera_position";
@@ -49,9 +44,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     // A default location (Odessa, Ukraine) and default zoom to use when location permission is
     // not granted.
     private final LatLng mDefaultLocation = new LatLng(46.4775, 30.7326);
-    private static final int DEFAULT_ZOOM = 15;
+    private static final int DEFAULT_ZOOM = 12;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
-    private boolean mLocationPermissionGranted;
+    private boolean mLocationPermissionGranted = false;
 
     public MapFragment() {
         // Required empty public constructor
@@ -73,27 +68,21 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
                     mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
                     mMap.getUiSettings().setZoomControlsEnabled(true);
-                    mMap.getUiSettings().setMyLocationButtonEnabled(true);
-                    mMap.getUiSettings().setCompassEnabled(true);
+                    mMap.setMyLocationEnabled(true);
 
-                    CameraPosition googlePlex = CameraPosition.builder()
-                            .target(new LatLng(46.4775, 30.7326))
-                            .zoom(12)
+                    CameraPosition cityOdessa = CameraPosition.builder()
+                            .target(new LatLng(mDefaultLocation.latitude, mDefaultLocation.longitude))
+                            .zoom(DEFAULT_ZOOM)
                             .bearing(0)
                             .build();
 
-                    mMap.animateCamera(CameraUpdateFactory.newCameraPosition(googlePlex), 10, null);
+                    mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cityOdessa), 10, null);
 
                     // Prompt the user for permission.
                     getLocationPermission();
-
-                    // Turn on the My Location layer and the related control on the map.
                     updateLocationUI();
 
-                    // Get the current location of the device and set the position of the map.
-                    getDeviceLocation();
-
-                    Polyline TaxibusRouteNum4 = mMap.addPolyline(new PolylineOptions()
+                    /*Polyline TaxibusRouteNum4 = mMap.addPolyline(new PolylineOptions()
                             .clickable(true)
                             .color(0xFF06B80E)
                             .add(
@@ -141,7 +130,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                                     new LatLng(46.443760, 30.634630),
                                     new LatLng(46.443879, 30.634212),
                                     new LatLng(46.444887, 30.633511)
-                            ));
+                            ));*/
 
                 }
             });
@@ -149,40 +138,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         return view;
     }
 
-    private void getDeviceLocation() {
-        /*
-         * Get the best and most recent location of the device, which may be null in rare
-         * cases when a location is not available.
-         */
-
-        try {
-            if (mLocationPermissionGranted) {
-                Task<Location> locationResult = mFusedLocationProviderClient.getLastLocation();
-                locationResult.addOnCompleteListener((Executor) this, new OnCompleteListener<Location>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Location> task) {
-                        if (task.isSuccessful()) {
-                            // Set the map's camera position to the current location of the device.
-                            mLastKnownLocation = task.getResult();
-                            if (mLastKnownLocation != null) {
-                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
-                            }
-                        } else {
-                            Log.d(TAG, "Current location is null. Using defaults.");
-                            Log.e(TAG, "Exception: %s", task.getException());
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
-                            mMap.getUiSettings().setMyLocationButtonEnabled(false);
-                        }
-                    }
-                });
-            }
-        } catch (SecurityException e) {
-            Log.e("Exception: %s", e.getMessage());
-        }
-    }
-
     private void getLocationPermission() {
-        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+//        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+        if (ContextCompat.checkSelfPermission(this.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+            mLocationPermissionGranted = true;
+            updateLocationUI();
+        }
     }
 
     /**
@@ -196,10 +158,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         try {
             if (mLocationPermissionGranted) {
                 mMap.setMyLocationEnabled(true);
-                mMap.getUiSettings().setMyLocationButtonEnabled(true);
             } else {
                 mMap.setMyLocationEnabled(false);
-                mMap.getUiSettings().setMyLocationButtonEnabled(false);
                 mLastKnownLocation = null;
                 getLocationPermission();
             }
