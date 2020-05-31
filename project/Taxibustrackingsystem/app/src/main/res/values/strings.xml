@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Система трекингу маршрутного такси</string>
     <string name="title_info">Инфо</string>
-    <string name="title_routes">Маршрут</string>
+    <string name="title_routes">Маршруты</string>
     <string name="title_map">Карта</string>
     <string name="title_activity_maps">Map</string>
 </resources>
