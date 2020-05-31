@@ -1,10 +1,9 @@
 package com.example.taxibus_tracking_system.ui.map;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,42 +13,20 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.taxibus_tracking_system.R;
-import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
-    private static final String TAG = MapFragment.class.getSimpleName();
-    private MapViewModel mapViewModel = null;
-    private GoogleMap mMap = null;
-    private CameraPosition mCameraPosition = null;
-    private UiSettings uiSettings = null;
+    private GoogleMap mMap;
 
-    // The entry point to the Fused Location Provider.
-    private FusedLocationProviderClient mFusedLocationProviderClient;
-
-    // The geographical location where the device is currently located. That is, the last-known
-    // location retrieved by the Fused Location Provider.
-    private Location mLastKnownLocation = null;
-
-    // Keys for storing activity state.
-    private static final String KEY_CAMERA_POSITION = "camera_position";
-    private static final String KEY_LOCATION = "location";
-
-    // A default location (Odessa, Ukraine) and default zoom to use when location permission is
-    // not granted.
     private final LatLng mDefaultLocation = new LatLng(46.4775, 30.7326);
     private static final int DEFAULT_ZOOM = 12;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
-    private boolean mLocationPermissionGranted = false;
 
     public MapFragment() {
         // Required empty public constructor
@@ -63,9 +40,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_map, null, false);
+        @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.fragment_map, null, false);
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(this);
+        }
         return view;
     }
 
@@ -74,7 +53,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mMap = googleMap;
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mMap.getUiSettings().setZoomControlsEnabled(true);
-//        mMap.setMyLocationEnabled(true);
 
         CameraPosition cityOdessa = CameraPosition.builder()
                 .target(new LatLng(mDefaultLocation.latitude, mDefaultLocation.longitude))
@@ -84,11 +62,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cityOdessa), 10, null);
 
-        // Prompt the user for permission.
-        getLocationPermission();
-        updateLocationUI();
-
-        Polyline TaxiBusRouteNum4 = mMap.addPolyline(new PolylineOptions()
+        /*Polyline TaxiBusRouteNum4 = mMap.addPolyline(new PolylineOptions()
                 .clickable(true)
                 .color(0xFF06B80E)
                 .add(
@@ -136,36 +110,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         new LatLng(46.443760, 30.634630),
                         new LatLng(46.443879, 30.634212),
                         new LatLng(46.444887, 30.633511)
-                ));
+                ));*/
+
+        // Prompt the user for permission.
+        getLocationPermission();
     }
 
     private void getLocationPermission() {
-        if (ContextCompat.checkSelfPermission(this.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-            mLocationPermissionGranted = true;
-            updateLocationUI();
+        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+        if (ContextCompat.checkSelfPermission(this.requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            mMap.setMyLocationEnabled(true);
+
+            // FIXME: Fix PERMISSION_GRANTED. Make more security & add LocationEnabled in a first frame
         }
     }
-
-    /**
-     * Updates the map's UI settings based on whether the user has granted location permission.
-     */
-
-    private void updateLocationUI() {
-        if (mMap == null) {
-            return;
-        }
-        try {
-            if (mLocationPermissionGranted) {
-                mMap.setMyLocationEnabled(true);
-            } else {
-                mMap.setMyLocationEnabled(false);
-                mLastKnownLocation = null;
-                getLocationPermission();
-            }
-        } catch (SecurityException e) {
-            Log.e("Exception: %s", e.getMessage());
-        }
-    }
-
 }
