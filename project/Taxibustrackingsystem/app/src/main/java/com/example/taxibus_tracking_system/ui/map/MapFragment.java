@@ -32,20 +32,31 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         // Required empty public constructor
     }
 
+    public static MapFragment newInstance() {
+        MapFragment fragment = new MapFragment();
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        Toast.makeText(this.getContext(), "onCreate", Toast.LENGTH_LONG).show();
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.fragment_map, null, false);
+        @SuppressLint("InflateParams") View rootView = inflater.inflate(R.layout.fragment_map, null, false);
+
+//        Toast.makeText(this.getContext(), "onCreateView", Toast.LENGTH_LONG).show();
+
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.map);
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
         }
-        return view;
+        return rootView;
     }
 
     @Override
@@ -124,4 +135,62 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             // FIXME: Fix PERMISSION_GRANTED. Make more security & add LocationEnabled in a first frame
         }
     }
+
+
+    /*@SuppressLint("ShowToast")
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        Toast.makeText(this.getContext(), "onAttach", Toast.LENGTH_LONG).show();
+    }
+
+    @SuppressLint("ShowToast")
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Toast.makeText(this.getContext(), "onActivityCreated", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Toast.makeText(this.getContext(), "onStart", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Toast.makeText(this.getContext(), "onResume", Toast.LENGTH_LONG).show();
+    }
+
+    @SuppressLint("ShowToast")
+    @Override
+    public void onPause() {
+        super.onPause();
+        Toast.makeText(this.getActivity(), "onPause", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Toast.makeText(this.getContext(), "onStop", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Toast.makeText(this.getContext(), "onDestroyView", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Toast.makeText(this.getContext(), "onDestroy", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Toast.makeText(this.getContext(), "onDetach", Toast.LENGTH_LONG).show();
+    }*/
 }
