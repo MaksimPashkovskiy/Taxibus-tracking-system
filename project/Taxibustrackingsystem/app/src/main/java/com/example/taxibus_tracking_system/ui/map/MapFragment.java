@@ -19,6 +19,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
@@ -39,19 +41,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         return fragment;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-//        Toast.makeText(this.getContext(), "onCreate", Toast.LENGTH_LONG).show();
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         @SuppressLint("InflateParams") View rootView = inflater.inflate(R.layout.fragment_map, null, false);
-
-//        Toast.makeText(this.getContext(), "onCreateView", Toast.LENGTH_LONG).show();
-
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.map);
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
@@ -73,7 +66,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cityOdessa), 10, null);
 
-        /*Polyline TaxiBusRouteNum4 = mMap.addPolyline(new PolylineOptions()
+        getPolylineRouteNum4();
+
+        // Prompt the user for permission.
+        getLocationPermission();
+    }
+
+    private void getPolylineRouteNum4() {
+
+        Polyline TaxiBusRouteNum4 = mMap.addPolyline(new PolylineOptions()
                 .clickable(true)
                 .color(0xFF06B80E)
                 .add(
@@ -121,11 +122,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         new LatLng(46.443760, 30.634630),
                         new LatLng(46.443879, 30.634212),
                         new LatLng(46.444887, 30.633511)
-                ));*/
-
-        // Prompt the user for permission.
-        getLocationPermission();
+                ));
     }
+
 
     private void getLocationPermission() {
         requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);

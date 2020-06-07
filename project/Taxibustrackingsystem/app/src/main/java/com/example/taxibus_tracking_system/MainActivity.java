@@ -29,16 +29,6 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
-
-
-        /*FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.nav_host_fragment, MapFragment.newInstance()).hide(MapFragment.newInstance());
-        fragmentTransaction.add(R.id.nav_host_fragment, RoutesFragment.newInstance()).hide(RoutesFragment.newInstance());
-        fragmentTransaction.add(R.id.nav_host_fragment, InfoFragment.newInstance()).hide(InfoFragment.newInstance());
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();*/
-
     }
 
     @Override
