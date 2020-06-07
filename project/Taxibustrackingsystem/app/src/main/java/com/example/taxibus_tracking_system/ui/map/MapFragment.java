@@ -19,12 +19,9 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
-
-    private GoogleMap mMap;
 
     private final LatLng mDefaultLocation = new LatLng(46.4775, 30.7326);
     private static final int DEFAULT_ZOOM = 12;
@@ -32,13 +29,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     public MapFragment() {
         // Required empty public constructor
-    }
-
-    public static MapFragment newInstance() {
-        MapFragment fragment = new MapFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Nullable
@@ -54,9 +44,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        mMap.getUiSettings().setZoomControlsEnabled(true);
+        googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        googleMap.getUiSettings().setZoomControlsEnabled(true);
 
         CameraPosition cityOdessa = CameraPosition.builder()
                 .target(new LatLng(mDefaultLocation.latitude, mDefaultLocation.longitude))
@@ -64,17 +53,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 .bearing(0)
                 .build();
 
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cityOdessa), 10, null);
+        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cityOdessa), 10, null);
 
-        getPolylineRouteNum4();
+        getPolylineRouteNum4(googleMap);
 
         // Prompt the user for permission.
-        getLocationPermission();
+        getLocationPermission(googleMap);
     }
 
-    private void getPolylineRouteNum4() {
+    private void getPolylineRouteNum4(GoogleMap map) {
 
-        Polyline TaxiBusRouteNum4 = mMap.addPolyline(new PolylineOptions()
+        map.addPolyline(new PolylineOptions()
                 .clickable(true)
                 .color(0xFF06B80E)
                 .add(
@@ -126,10 +115,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
 
-    private void getLocationPermission() {
+    private void getLocationPermission(GoogleMap map) {
         requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
         if (ContextCompat.checkSelfPermission(this.requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            mMap.setMyLocationEnabled(true);
+            map.setMyLocationEnabled(true);
 
             // FIXME: Fix PERMISSION_GRANTED. Make more security & add LocationEnabled in a first frame
         }
