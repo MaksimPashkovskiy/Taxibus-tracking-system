@@ -1,4 +1,4 @@
-package com.example.taxibus_tracking_system.ui.map;
+package com.example.taxibus_tracking_system.fragments;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.taxibus_tracking_system.R;
+import com.example.taxibus_tracking_system.SharedPreferencesConfig;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -57,16 +58,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cityOdessa), 10, null);
 
-//        Switch
-        /*Bundle bundle = getArguments();
-        String message = bundle.getString("message");
-        if (Boolean.parseBoolean(message)) {
+        SharedPreferencesConfig preferencesConfig = new SharedPreferencesConfig(requireActivity());
+        if (preferencesConfig.readRouteStatus()) {
             getPolylineRouteNum4(googleMap);
-        }*/
-
-//        getPolylineRouteNum4(googleMap);
-
+        }
         // Prompt the user for permission.
+
         getLocationPermission(googleMap);
     }
 
@@ -123,7 +120,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 ));
     }
 
-
     private void getLocationPermission(GoogleMap map) {
         requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
         if (ContextCompat.checkSelfPermission(this.requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -133,61 +129,4 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
-
-    /*@SuppressLint("ShowToast")
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        Toast.makeText(this.getContext(), "onAttach", Toast.LENGTH_LONG).show();
-    }
-
-    @SuppressLint("ShowToast")
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Toast.makeText(this.getContext(), "onActivityCreated", Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        Toast.makeText(this.getContext(), "onStart", Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Toast.makeText(this.getContext(), "onResume", Toast.LENGTH_LONG).show();
-    }
-
-    @SuppressLint("ShowToast")
-    @Override
-    public void onPause() {
-        super.onPause();
-        Toast.makeText(this.getActivity(), "onPause", Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Toast.makeText(this.getContext(), "onStop", Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        Toast.makeText(this.getContext(), "onDestroyView", Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Toast.makeText(this.getContext(), "onDestroy", Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        Toast.makeText(this.getContext(), "onDetach", Toast.LENGTH_LONG).show();
-    }*/
 }

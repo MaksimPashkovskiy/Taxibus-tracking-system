@@ -5,7 +5,7 @@
     android:id="@+id/info"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.info.InfoFragment"
+    tools:context=".fragments.InfoFragment"
     android:orientation="vertical">
 
     <TextView
@@ -17,36 +17,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Output: "
-        android:id="@+id/someText"/>
-
-    <Switch
-
-        android:id="@+id/switchRouteNum42"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:paddingHorizontal="24dp"
-        android:text="@string/route_num_4"
-        android:textSize="24sp" />
-
-    <Switch
-        android:id="@+id/switchRouteNum52"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:paddingHorizontal="24dp"
-        android:text="@string/route_num_5"
-        android:textSize="24sp" />
-
-    <Switch
-        android:id="@+id/switchRouteNum62"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:paddingHorizontal="24dp"
-        android:text="@string/route_num_6"
-        android:textSize="24sp" />
 
 </LinearLayout>

@@ -5,13 +5,8 @@
     <string name="title_map">Карта</string>
 
     <string name="route_num_4">Маршрут №4</string>
-    <string name="route_num_5">Маршрут №5</string>
-    <string name="route_num_6">Маршрут №6</string>
 
     <string name="route_num_four_status_preference">route_num_four_status_preference</string>
-    <string name="route_num_five_status_preference">route_num_five_status_preference</string>
-    <string name="route_num_six_status_preference">route_num_six_status_preference</string>
-
     <string name="shared_preferences">com.example.taxibus_tracking_system.shared_preferences</string>
 
 

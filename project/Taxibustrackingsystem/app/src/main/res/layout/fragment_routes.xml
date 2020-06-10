@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.routes.RoutesFragment">
-
+    tools:context=".fragments.RoutesFragment">
 
     <Switch
         android:id="@+id/switchRouteNum4"
@@ -15,22 +14,5 @@
         android:paddingHorizontal="24dp"
         android:text="@string/route_num_4"
         android:textSize="24sp" />
-
-    <Switch
-        android:id="@+id/switchRouteNum5"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:paddingHorizontal="24dp"
-        android:text="@string/route_num_5"
-        android:textSize="24sp" />
-
-    <Switch
-        android:id="@+id/switchRouteNum6"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:paddingHorizontal="24dp"
-        android:text="@string/route_num_6"
-        android:textSize="24sp" />
-
 
 </LinearLayout>

@@ -7,32 +7,19 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import com.example.taxibus_tracking_system.ui.info.InfoFragment;
-import com.example.taxibus_tracking_system.ui.map.MapFragment;
-import com.example.taxibus_tracking_system.ui.routes.RoutesFragment;
+import com.example.taxibus_tracking_system.fragments.InfoFragment;
+import com.example.taxibus_tracking_system.fragments.MapFragment;
+import com.example.taxibus_tracking_system.fragments.RoutesFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements RoutesFragment.OnStatusSendListener {
-
-    private static final String TAG = "MainActivity";
-
-//    private SharedPreferencesConfig preferencesConfig;
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        /*BottomNavigationView navView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_map, R.id.navigation_routes, R.id.navigation_info)
-                .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-        NavigationUI.setupWithNavController(navView, navController);*/
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(navigationViewListener);
@@ -48,7 +35,6 @@ public class MainActivity extends AppCompatActivity implements RoutesFragment.On
     private BottomNavigationView.OnNavigationItemSelectedListener navigationViewListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
             switch (item.getItemId()){
                 case R.id.navigation_map:
                     MapFragment mapFragment = new MapFragment();
@@ -76,15 +62,4 @@ public class MainActivity extends AppCompatActivity implements RoutesFragment.On
         }
     }
 
-    @Override
-    public void onStatusSend(Boolean status) {
-        /*InfoFragment infoFragment = new InfoFragment();
-        Bundle bundle = new Bundle();
-        bundle.putBoolean("status", status);
-        infoFragment.setArguments(bundle);
-*/
-        /*FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, infoFragment, null);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();*/
-    }
 }
