@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:paddingHorizontal="24dp"
-        android:text="@string/routeNum4"
+        android:text="@string/route_num_4"
         android:textSize="24sp" />
 
     <Switch
@@ -21,7 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:paddingHorizontal="24dp"
-        android:text="@string/routeNum5"
+        android:text="@string/route_num_5"
         android:textSize="24sp" />
 
     <Switch
@@ -29,7 +29,7 @@
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:paddingHorizontal="24dp"
-        android:text="@string/routeNum6"
+        android:text="@string/route_num_6"
         android:textSize="24sp" />
 
 

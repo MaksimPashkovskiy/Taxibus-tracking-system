@@ -23,6 +23,8 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
+    public static final String TAG = "MapFragment";
+
     private final LatLng mDefaultLocation = new LatLng(46.4775, 30.7326);
     private static final int DEFAULT_ZOOM = 12;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
@@ -55,7 +57,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cityOdessa), 10, null);
 
-        getPolylineRouteNum4(googleMap);
+//        Switch
+        /*Bundle bundle = getArguments();
+        String message = bundle.getString("message");
+        if (Boolean.parseBoolean(message)) {
+            getPolylineRouteNum4(googleMap);
+        }*/
+
+//        getPolylineRouteNum4(googleMap);
 
         // Prompt the user for permission.
         getLocationPermission(googleMap);
