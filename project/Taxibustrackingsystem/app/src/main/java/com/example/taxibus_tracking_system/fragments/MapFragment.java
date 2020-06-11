@@ -1,21 +1,23 @@
 package com.example.taxibus_tracking_system.fragments;
 
 import android.Manifest;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.taxibus_tracking_system.DBHelper;
+import com.example.taxibus_tracking_system.DoubleArrayEvaluator;
 import com.example.taxibus_tracking_system.R;
 import com.example.taxibus_tracking_system.SharedPreferencesConfig;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -24,6 +26,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.io.IOException;
@@ -53,7 +57,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         googleMap.getUiSettings().setZoomControlsEnabled(true);
 
@@ -68,9 +71,30 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         SharedPreferencesConfig preferencesConfig = new SharedPreferencesConfig(requireActivity());
         if (preferencesConfig.readRouteStatus()) {
             getRouteFromDataBase(googleMap);
+            LatLng oldLatLng = new LatLng(46.434964, 30.720885);
+            LatLng newLatLng = new LatLng(46.451558, 30.683085);
+            Marker marker = googleMap.addMarker(new MarkerOptions().position(oldLatLng));
+            setMarkerMovement(marker, newLatLng);
         }
         getLocationPermission(googleMap);
     }
+
+    private void setMarkerMovement(final Marker marker, LatLng newLatLng) {
+        double[] startValues = new double[]{marker.getPosition().latitude, marker.getPosition().longitude};
+        double[] endValues = new double[]{newLatLng.latitude, newLatLng.longitude};
+        ValueAnimator latLngAnimator = ValueAnimator.ofObject(new DoubleArrayEvaluator(), startValues, endValues);
+        latLngAnimator.setDuration(800000);
+        latLngAnimator.setInterpolator(new DecelerateInterpolator());
+        latLngAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                double[] animatedValue = (double[]) animation.getAnimatedValue();
+                marker.setPosition(new LatLng(animatedValue[0], animatedValue[1]));
+            }
+        });
+        latLngAnimator.start();
+    }
+
 
     private void getLocationPermission(GoogleMap map) {
         requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
@@ -108,5 +132,4 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         routeOptions.color(0xFF06B80E);
         map.addPolyline(routeOptions);
     }
-
 }
