@@ -117,7 +117,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
 
         mDb = mDBHelper.getWritableDatabase();
-        String query = "SELECT lat, lng FROM coordinates";
+        String query = "SELECT lat, lng FROM coordinates WHERE route_num = '4'";
 
         Cursor cursor = mDb.rawQuery(query, null);
         cursor.moveToFirst();
