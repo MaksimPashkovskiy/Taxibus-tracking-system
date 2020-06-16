@@ -73,7 +73,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             getRouteFromDataBase(googleMap);
             LatLng oldLatLng = new LatLng(46.434964, 30.720885);
             LatLng newLatLng = new LatLng(46.451558, 30.683085);
-            Marker marker = googleMap.addMarker(new MarkerOptions().position(oldLatLng));
+            Marker marker = googleMap.addMarker(new MarkerOptions().position(oldLatLng).title("Маршрут №4"));
             setMarkerMovement(marker, newLatLng);
         }
         getLocationPermission(googleMap);
